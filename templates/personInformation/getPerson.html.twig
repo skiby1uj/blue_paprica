@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h2>Person information</h2>
+
+    <table>
+        <tr>
+            <th>First name</th>
+            <th>Surname</th>
+            <th>File</th>
+        </tr>
+        {% for person in persons %}
+            <tr>
+                <td>{{ person.firstName }}</td>
+                <td>{{ person.surname }}</td>
+                <td>{{ person.fileName }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
