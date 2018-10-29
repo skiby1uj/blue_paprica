@@ -1,19 +1,24 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <h2>Person information</h2>
 
-    <table>
-        <tr>
-            <th>First name</th>
-            <th>Surname</th>
-            <th>File</th>
-        </tr>
-        {% for person in persons %}
+    {% if app.user %}
+        <h2>Person information</h2>
+
+        <table>
             <tr>
-                <td>{{ person.firstName }}</td>
-                <td>{{ person.surname }}</td>
-                <td>{{ person.fileName }}</td>
+                <th>First name</th>
+                <th>Surname</th>
+                <th>File</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for person in persons %}
+                <tr>
+                    <td>{{ person.firstName }}</td>
+                    <td>{{ person.surname }}</td>
+                    <td>{{ person.fileName }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <a href="/download">Download</a>
+    {% endif %}
 {% endblock %}

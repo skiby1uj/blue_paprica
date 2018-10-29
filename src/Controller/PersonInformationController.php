@@ -5,9 +5,12 @@ namespace App\Controller;
 
 use App\Entity\PersonInformation;
 use App\Form\UploadType;
+use Doctrine\ORM\Query;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PersonInformationController extends Controller
@@ -71,5 +74,47 @@ class PersonInformationController extends Controller
 		return $this->render("personInformation/getPerson.html.twig", [
 			'persons' => $persons
 		]);
+	}
+
+	/**
+	 * @Route("/download")
+	 *
+	 */
+	public function downloadAction()
+	{
+		$query = $this->getDoctrine()
+			->getRepository(PersonInformation::class)
+			->createQueryBuilder('c')
+			->select("c.firstName, c.surname, c.fileName")
+			->getQuery();
+		$persons = $query->getResult(Query::HYDRATE_ARRAY);
+
+		if(count($persons)) {
+			$directory = 'download/dump.csv';
+
+			$csvh = fopen($directory, 'w');
+
+			foreach($persons as $record) {
+				$data = (array)$record;
+
+				fputcsv($csvh, $data, ';');
+			}
+
+			fclose($csvh);
+
+			$response = new BinaryFileResponse($directory);
+			return $response->setContentDisposition(
+				ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+				'persons_information.csv'
+			);
+		}
+		else {
+			$this->addFlash(
+				'error',
+				"Person information is empty"
+			);
+
+			return $this->redirectToRoute('homepage');
+		}
 	}
 }
