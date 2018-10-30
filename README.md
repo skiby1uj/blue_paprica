@@ -1,4 +1,4 @@
-# Plue Paprica
+# Blue Paprica
 
 ### Create project and settings
 
@@ -7,9 +7,9 @@ Open console in directory where you want create project and write:
 
     git clone https://github.com/skiby1uj/blue_paprica.git
 
-Go to project (cd blue_paprica) and you must set database configure in .enc:
+Go to project (cd blue_paprica) and you must set database configure in .env:
 
-    sudo vim .enc
+    sudo vim .env
     
 In file you must set db_user, db_password and db_name (probably 16 line in the file)
 Example sets:
